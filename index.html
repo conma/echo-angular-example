@@ -8,17 +8,17 @@
     <title>Go Echo - AngularJS Example</title>
 </head>
 <body>
-    <div ng-app="loginApp" ng-controller="loginController">
-        <form ng-submit="login()">
+    <div ng-app="userManagementApp" ng-controller="createUserController">
+        <form ng-submit="create()">
             <label>Name:</label>
-            <input ng-model="user"/>
+            <input ng-model="username"/>
             <label>Password:</label>
             <input ng-model="password"/>
-            <button>Login</button>
+            <button>Create</button>
         </form>
         <hr/>
-        <p>Thông tin đăng nhập:</p>
-        <div id="login-info"></div>
+        <p>Thông tin đăng ký:</p>
+        <div id="create-info"></div>
     </div>
 </body>
 </html>
