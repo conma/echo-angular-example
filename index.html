@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <script src="/static/app.js"></script>
+    <title>Go Echo - AngularJS Example</title>
+</head>
+<body>
+    <div ng-app="loginApp" ng-controller="loginController">
+        <form ng-submit="login()">
+            <label>Name:</label>
+            <input ng-model="user"/>
+            <label>Password:</label>
+            <input ng-model="password"/>
+            <button>Login</button>
+        </form>
+        <hr/>
+        <p>Thông tin đăng nhập:</p>
+        <div id="login-info"></div>
+    </div>
+</body>
+</html>
