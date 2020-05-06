@@ -1,16 +1,17 @@
 package main
 
 import (
+	"github.com/labstack/echo"
 	"html/template"
 	"io"
 	"net/http"
-	"github.com/labstack/echo"
 )
 
 type (
+	// properties of model must in Sentence case
 	User struct {
-		username	string	`json:"username"`
-		password	string	`json:"password"`
+		Username	string	`json:"username"`
+		Password	string	`json:"password"`
 	}
 	TemplateRenderer struct {
 		templates *template.Template
@@ -18,7 +19,7 @@ type (
 )
 
 var (
-	users map [string]*User
+	Users = map [string]*User{}
 )
 
 func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
@@ -32,6 +33,7 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 func main()  {
 	e := echo.New()
 	e.Static("/static", "echo-angular-example")
+	e.Static("/template", "echo-angular-example/template")
 	renderer :=  &TemplateRenderer{
 		templates: template.Must(template.ParseGlob("echo-angular-example/*.html")),
 	}
@@ -40,6 +42,8 @@ func main()  {
 	e.GET("/users/create", ShowCreateUser)
 	e.GET("/users/:username", ShowUser)
 	e.GET("/users/get/:username", GetUser)
+	e.GET("/users/get", GetUsers)
+	e.GET("/users/", ShowUsers)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
@@ -48,13 +52,21 @@ func ShowUser(c echo.Context) error {
 	return c.Render(http.StatusOK, "index.html", nil)
 }
 
+func ShowUsers(c echo.Context) error {
+	return c.Render(http.StatusOK, "index.html", "")
+}
+
 func GetUser(c echo.Context) error {
 	username := c.Param("username")
-	user := users[username]
+	user := Users[username]
 	if user != nil {
 		return c.JSON(http.StatusOK, user)
 	}
 	return c.JSON(http.StatusNotFound, nil)
+}
+
+func GetUsers(c echo.Context) error {
+	return c.JSON(http.StatusOK, Users)
 }
 
 func ShowCreateUser(c echo.Context) error {
@@ -62,15 +74,16 @@ func ShowCreateUser(c echo.Context) error {
 }
 
 func CreateUser(c echo.Context) error {
-	username := c.FormValue("username")
-	password := c.FormValue("password")
-	if username != "" && password != "" {
+	user := &User{}
+	c.Bind(user)
+	if user.Username != "" && user.Password != "" {
 		u := &User{
-			username : username,
-			password: password,
+			Username : user.Username,
+			Password: user.Password,
 		}
+		Users[user.Username] = user
 		return c.JSON(http.StatusCreated, u)
 	}
-	return c.JSON(http.StatusBadRequest, "Bad request")
+	return c.JSON(http.StatusBadRequest, "Bad request. Username or Password is empty.")
 
 }

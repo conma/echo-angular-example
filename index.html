@@ -9,12 +9,14 @@
 </head>
 <body>
     <div ng-app="userManagementApp" ng-controller="createUserController">
-        <form ng-submit="create()">
-            <label>Name:</label>
-            <input ng-model="username"/>
-            <label>Password:</label>
-            <input ng-model="password"/>
-            <button>Create</button>
+        <div id="main-content">
+            <div ng-list-user></div>
+            <div ng-create-user-form></div>
+            <button ngClick="showCreateUser()">Go to Create user Page</button>
+        </div>
+    </div>
+</body>
+</html>utton>
         </form>
         <hr/>
         <p>Thông tin đăng ký:</p>
